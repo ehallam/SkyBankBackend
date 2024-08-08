@@ -1,8 +1,6 @@
-package com.qa.sky.spring.entities;
+package com.sky.SkyBankBackend.entities;
 
-import com.qa.sky.spring.dto.CatWithOwnerDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 
 @Entity // marks the class as a table
 @Table(name = "customer") // lets you configure the created table
@@ -12,33 +10,25 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Integer id;
 
-    @Column(name = "name", unique = true)
-    private String name;
-    private int age;
-    private String furColour;
+    @Column
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
+    private String sortCode;
+    private int accountNumber;
 
-    @ManyToOne
-    private Person owner;
-
-    public Cat(String name, int age, String furColour) {
-        this.name = name;
-        this.age = age;
-        this.furColour = furColour;
+    public Customer(String firstName, String lastName, String email, String password, String sortCode, int accountNumber){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.sortCode = sortCode;
+        this.accountNumber = accountNumber;
     }
-
     // REQUIRED
-    public Cat() {
+    public Customer() {
         super();
-    }
-
-    public Cat(CatWithOwnerDTO newCat) {
-        this.name = newCat.getName();
-        this.age = newCat.getAge();
-        this.furColour = newCat.getFurColour();
-        if (newCat.getOwnerId() != null) {
-            this.owner = new Person();
-            this.owner.setId(newCat.getOwnerId());
-        }
     }
 
 
@@ -52,34 +42,35 @@ public class Customer {
     }
 
     public String getName() {
-        return name;
+        return lastName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.lastName = lastName;
     }
 
-    public int getAge() {
-        return age;
+    public String getFirstName() { return firstName;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getFurColour() {
-        return furColour;
+    public int getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setFurColour(String furColour) {
-        this.furColour = furColour;
+    public void setAccountNumber(int accountNumber){
+        this.accountNumber = accountNumber;
     }
 
-    public Person getOwner() {
-        return owner;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setOwner(Person owner) {
-        this.owner = owner;
+    public void getEmail(String email){
+        this.email=email;
     }
+
+
 }
