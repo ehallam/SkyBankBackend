@@ -1,5 +1,6 @@
 package com.sky.SkyBankBackend.entities;
 
+import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import jakarta.persistence.*;
 
 @Entity // marks the class as a table
@@ -31,6 +32,18 @@ public class Customer {
         super();
     }
 
+    public Customer(CustomerDTO newCustomer) {
+        this.id = newCustomer.getId();
+        this.firstName = newCustomer.getFirstName();
+        this.lastName = newCustomer.getLastName();
+        this.email = newCustomer.getEmail();
+        this.password = newCustomer.getPassword();
+        this.sortCode = newCustomer.getSortCode();
+        this.accountNumber = newCustomer.getAccountNumber();
+    }
+
+
+
 
     // REQUIRED
     public Integer getId() {
@@ -41,11 +54,15 @@ public class Customer {
         this.id = id;
     }
 
-    public String getName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setName(String name) {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -64,12 +81,24 @@ public class Customer {
         this.accountNumber = accountNumber;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPassword(String password){
+        this.password = password;
     }
 
-    public void getEmail(String email){
-        this.email=email;
+    public String getPassword(){
+        return this.password;
+    }
+
+    public String getSortCode(){
+        return this.sortCode;
+    }
+
+    public void setSortCode(String sortCode) {
+        this.sortCode = sortCode;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 
