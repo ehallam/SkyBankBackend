@@ -1,30 +1,39 @@
 package com.sky.SkyBankBackend.entities;
 
+import com.sky.SkyBankBackend.rest.TransactionController;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Locale;
+import java.util.Date;
 
 @Entity
-@Table(name="Transaction")
+@Table(name = "transaction")
 public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String description;
-    private Locale data;
-    private Integer in;
-    private Integer out;
-    private Integer balance;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Column(name = "date")
+    private Date transactionDate;
+    private Double amountIn;
+    private Double amountOut;
+    private Double balance;
     private String customerEmail;
 
-    public Transaction(String description, Locale data, Integer in, Integer out, Integer balance, String customerEmail) {
+    public Transaction(String description, Date transactionDate, Double amountIn, Double amountOut, Double balance, String customerEmail) {
         this.description = description;
-        this.data = data;
-        this.in = in;
-        this.out = out;
+        this.transactionDate = transactionDate;
+        this.amountIn = amountIn;
+        this.amountOut = amountOut;
         this.balance = balance;
         this.customerEmail = customerEmail;
+    }
+
+    public Transaction() {
+        super();
     }
 
     public Integer getId() {
@@ -43,35 +52,35 @@ public class Transaction {
         this.description = description;
     }
 
-    public Locale getData() {
-        return data;
+    public Date getTransactionDate() {
+        return transactionDate;
     }
 
-    public void setData(Locale data) {
-        this.data = data;
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
-    public Integer getIn() {
-        return in;
+    public Double getAmountIn() {
+        return amountIn;
     }
 
-    public void setIn(Integer in) {
-        this.in = in;
+    public void setAmountIn(Double amountIn) {
+        this.amountIn = amountIn;
     }
 
-    public Integer getOut() {
-        return out;
+    public Double getAmountOut() {
+        return amountOut;
     }
 
-    public void setOut(Integer out) {
-        this.out = out;
+    public void setAmountOut(Double amountOut) {
+        this.amountOut = amountOut;
     }
 
-    public Integer getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
