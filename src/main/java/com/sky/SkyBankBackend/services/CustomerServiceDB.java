@@ -16,8 +16,6 @@ import java.util.Optional;
 @Service
 @Primary // tells spring to use this one
 public class CustomerServiceDB implements CustomerService {
-
-
     private final CustomerRepo repo;
 
     public CustomerServiceDB(CustomerRepo repo) {
