@@ -18,14 +18,16 @@ public class Customer {
     private String password;
     private String sortCode;
     private int accountNumber;
+    private double balance;
 
-    public Customer(String firstName, String lastName, String email, String password, String sortCode, int accountNumber){
+    public Customer(String firstName, String lastName, String email, String password, String sortCode, int accountNumber, double balance){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.sortCode = sortCode;
         this.accountNumber = accountNumber;
+        this.balance = balance;
     }
     // REQUIRED
     public Customer() {
@@ -40,6 +42,7 @@ public class Customer {
         this.password = newCustomer.getPassword();
         this.sortCode = newCustomer.getSortCode();
         this.accountNumber = newCustomer.getAccountNumber();
+        this.balance = newCustomer.getBalance();
     }
 
 
@@ -87,6 +90,14 @@ public class Customer {
 
     public String getPassword(){
         return this.password;
+    }
+
+    public double getBalance(){
+        return balance;
+    }
+
+    public void setBalance(double balance){
+        this.balance = balance;
     }
 
     public String getSortCode(){
