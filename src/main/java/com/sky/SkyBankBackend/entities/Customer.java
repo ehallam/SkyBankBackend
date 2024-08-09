@@ -93,7 +93,7 @@ public class Customer {
     }
 
     public double getBalance(){
-        return this.balance;
+        return balance;
     }
 
     public void setBalance(double balance){

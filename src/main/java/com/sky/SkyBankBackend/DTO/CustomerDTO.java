@@ -27,7 +27,7 @@ public class CustomerDTO {
         this.password = customer.getPassword();
         this.sortCode = customer.getSortCode();
         this.accountNumber = customer.getAccountNumber();
-
+        this.balance = customer.getBalance();
     }
 
     public Integer getId() {
