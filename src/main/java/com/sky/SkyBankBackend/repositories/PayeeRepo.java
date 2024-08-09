@@ -1,6 +1,5 @@
 package com.sky.SkyBankBackend.repositories;
 
-import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.entities.Payee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
