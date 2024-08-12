@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 public class Customer {
 
     @Id // PK
-    @Column(unique = true)
     private String email;
 
     @Column
