@@ -3,6 +3,7 @@ package com.sky.SkyBankBackend.rest;
 import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.services.CustomerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody String loginEmail, @RequestBody String loginPassword) {
+    public ResponseEntity<?> login(@RequestBody String loginEmail, @RequestBody String loginPassword) {
         return this.service.login(loginEmail,loginPassword);
     }
 }
