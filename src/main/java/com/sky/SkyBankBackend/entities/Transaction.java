@@ -1,5 +1,7 @@
 package com.sky.SkyBankBackend.entities;
 
+import com.sky.SkyBankBackend.DTO.PayeeDTO;
+import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.rest.TransactionController;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,16 +22,33 @@ public class Transaction {
     private LocalDate transactionDate;
     private Double amountIn;
     private Double amountOut;
-    private Double balance;
-    private String customerEmail;
+    private Integer payeeAccountNumber;
+    private Integer payeeSortCode;
 
-    public Transaction(String description, LocalDate transactionDate, Double amountIn, Double amountOut, Double balance, String customerEmail) {
+    @ManyToOne
+    private Customer customer;
+
+    public Transaction(String description, LocalDate transactionDate, Double amountIn, Double amountOut,
+                       Customer customer, Integer payeeAccountNumber, Integer payeeSortCode) {
         this.description = description;
         this.transactionDate = transactionDate;
         this.amountIn = amountIn;
         this.amountOut = amountOut;
-        this.balance = balance;
-        this.customerEmail = customerEmail;
+        this.customer = customer;
+        this.payeeAccountNumber = payeeAccountNumber;
+        this.payeeSortCode = payeeSortCode;
+    }
+
+    public Transaction(TransactionDTO newTransaction) {
+        this.id = newTransaction.getId();
+        this.description = newTransaction.getDescription();
+        this.transactionDate = newTransaction.getTransactionDate();
+        this.amountIn = newTransaction.getAmountIn();
+        this.amountOut = newTransaction.getAmountOut();
+        this.payeeAccountNumber = newTransaction.getPayeeAccountNumber();
+        this.payeeSortCode = newTransaction.getPayeeSortCode();
+        this.customer = new Customer();
+        this.customer.setEmail(newTransaction.getCustomerEmail());
     }
 
     public Transaction() {
@@ -76,19 +95,26 @@ public class Transaction {
         this.amountOut = amountOut;
     }
 
-    public Double getBalance() {
-        return balance;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
+    public void setCustomer(Customer customer) {this.customer = customer;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public Integer getPayeeAccountNumber() {
+        return payeeAccountNumber;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setPayeeAccountNumber(Integer payeeAccountNumber) {
+        this.payeeAccountNumber = payeeAccountNumber;
+    }
+
+    public Integer getPayeeSortCode() {
+        return payeeSortCode;
+    }
+
+    public void setPayeeSortCode(Integer payeeSortCode) {
+        this.payeeSortCode = payeeSortCode;
     }
 }

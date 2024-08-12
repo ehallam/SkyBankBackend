@@ -37,16 +37,12 @@ public class TransactionService {
         LocalDate transactionDate = transaction.getTransactionDate();
         Double amountIn = transaction.getAmountIn();
         Double amountOut = transaction.getAmountOut();
-        Double balance = transaction.getBalance();
-        String customerEmail = transaction.getCustomerEmail();
 
 
         if (description != null) toUpdate.setDescription(description);
         if (transactionDate != null) toUpdate.setTransactionDate(transactionDate);
         if (amountIn != null) toUpdate.setAmountIn(amountIn);
         if (amountOut != null) toUpdate.setAmountOut(amountOut);
-        if (balance != null) toUpdate.setBalance(balance);
-        if (customerEmail != null) toUpdate.setCustomerEmail(customerEmail);
 
         return this.repo.save(toUpdate);
     }
