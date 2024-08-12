@@ -4,6 +4,7 @@ import com.sky.SkyBankBackend.rest.TransactionController;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,15 +16,14 @@ public class Transaction {
     private Integer id;
 
     private String description;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(name = "date")
-    private Date transactionDate;
+    private LocalDate transactionDate;
     private Double amountIn;
     private Double amountOut;
     private Double balance;
     private String customerEmail;
 
-    public Transaction(String description, Date transactionDate, Double amountIn, Double amountOut, Double balance, String customerEmail) {
+    public Transaction(String description, LocalDate transactionDate, Double amountIn, Double amountOut, Double balance, String customerEmail) {
         this.description = description;
         this.transactionDate = transactionDate;
         this.amountIn = amountIn;
@@ -52,11 +52,11 @@ public class Transaction {
         this.description = description;
     }
 
-    public Date getTransactionDate() {
+    public LocalDate getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(Date transactionDate) {
+    public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
     }
 

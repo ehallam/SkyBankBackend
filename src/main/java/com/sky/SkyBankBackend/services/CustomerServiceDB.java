@@ -30,26 +30,20 @@ public class CustomerServiceDB implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomer(int id) {
-        Customer found = this.repo.findById(id).orElseThrow(CustomerNotFoundException::new);
-        return new CustomerDTO(found);
-    }
-
-    @Override
     public List<CustomerDTO> getAll() {
         return this.repo.findAll().stream().map(CustomerDTO::new).toList();
     }
 
     @Override
     public CustomerDTO getCustomerByEmail(String email) {
-        Customer found = this.repo.findByEmailIgnoreCase(email).orElseThrow(CustomerNotFoundException::new);
+        Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
         return new CustomerDTO(found);
     }
 
     @Override
-    public CustomerDTO remove(int id) {
-        Customer found = this.repo.findById(id).orElseThrow(CustomerNotFoundException::new);
-        this.repo.deleteById(id);
+    public CustomerDTO remove(String email) {
+        Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
+        this.repo.deleteById(email);
         return new CustomerDTO(found);
     }
 }

@@ -8,8 +8,9 @@ public class PayeeDTO {
 
     private String firstName;
     private String lastName;
-    private String email;
-    private String sortCode;
+    private Integer sortCode;
+    private String customerEmail;
+    private Integer accountNumber;
 
     public PayeeDTO() {
     }
@@ -18,8 +19,9 @@ public class PayeeDTO {
         this.id = payee.getId();
         this.firstName = payee.getFirstName();
         this.lastName = payee.getLastName();
-        this.email = payee.getEmail();
+        this.customerEmail = payee.getCustomer().getEmail();
         this.sortCode = payee.getSortCode();
+        this.accountNumber = payee.getAccountNumber();
     }
 
     public Integer getId() {
@@ -34,10 +36,6 @@ public class PayeeDTO {
         return lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -49,15 +47,29 @@ public class PayeeDTO {
         this.firstName = firstName;
     }
 
-    public String getSortCode(){
+    public Integer getAccountNumber(){
+        return this.accountNumber;
+    }
+
+    public void setAccountNumber(Integer accountNumber){
+        this.accountNumber = accountNumber;
+    }
+
+
+    public Integer getSortCode(){
         return this.sortCode;
     }
 
-    public void setSortCode(String sortCode) {
+    public void setSortCode(Integer sortCode) {
         this.sortCode = sortCode;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getCustomerEmail() {
+        return customerEmail;
     }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
 }

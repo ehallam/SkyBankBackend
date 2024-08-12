@@ -14,14 +14,19 @@ public class Payee {
     @Column
     private String firstName;
     private String lastName;
-    private String email;
-    private String sortCode;
 
-    public Payee(String firstName, String lastName, String email, String sortCode){
+    private Integer sortCode;
+    private Integer accountNumber;
+
+    @ManyToOne
+    private Customer customer;
+
+    public Payee(String firstName, String lastName, String customerEmail , Integer sortCode, Integer accountNumber, Customer customer){
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.sortCode = sortCode;
+        this.accountNumber = accountNumber;
+        this.customer = customer;
     }
     // REQUIRED
     public Payee() {
@@ -32,8 +37,10 @@ public class Payee {
         this.id = newPayee.getId();
         this.firstName = newPayee.getFirstName();
         this.lastName = newPayee.getLastName();
-        this.email = newPayee.getEmail();
         this.sortCode = newPayee.getSortCode();
+        this.accountNumber = newPayee.getAccountNumber();
+        this.customer = new Customer();
+        this.customer.setEmail(newPayee.getCustomerEmail());
     }
 
 
@@ -52,10 +59,6 @@ public class Payee {
         return lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -67,17 +70,28 @@ public class Payee {
         this.firstName = firstName;
     }
 
-    public String getSortCode(){
+    public Integer getSortCode(){
         return this.sortCode;
     }
 
-    public void setSortCode(String sortCode) {
+    public void setSortCode(Integer sortCode) {
         this.sortCode = sortCode;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+
+    public Integer getAccountNumber(){
+        return this.accountNumber;
     }
 
+    public void setAccountNumber(Integer accountNumber){
+        this.accountNumber = accountNumber;
+    }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 }
