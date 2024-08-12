@@ -15,4 +15,8 @@ public class TransactionControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
+    @Test
+    void testGetAll() throws Exception {
+
+    }
 }

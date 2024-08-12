@@ -52,7 +52,7 @@ public class CustomerServiceDB implements CustomerService {
         return new CustomerDTO(found);
     }
 
-    private String sha256(String input) {
+    public static String sha256(String input) {
         try {
             // Get an instance of the SHA-256 message digest
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

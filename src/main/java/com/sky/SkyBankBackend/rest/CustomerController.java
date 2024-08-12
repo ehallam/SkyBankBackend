@@ -41,7 +41,6 @@ public class CustomerController {
         return this.service.addCustomer(newCustomer);
     }
 
-
     @DeleteMapping("/remove/{email}")
     public CustomerDTO remove(@PathVariable String email) {
         return this.service.remove(email);
