@@ -1,6 +1,8 @@
 package com.sky.SkyBankBackend.rest;
 
+import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.DTO.PayeeDTO;
+import com.sky.SkyBankBackend.entities.Payee;
 import com.sky.SkyBankBackend.services.PayeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,11 @@ public class PayeeController {
     @GetMapping("/getAll")
     public List<PayeeDTO> getAll() {
         return this.service.getAll();
+    }
+
+    @GetMapping("/getAll/{email}")
+    public List<PayeeDTO> getAllByEmail(@PathVariable String email) {
+        return this.service.getAllByEmail(email);
     }
 
 
