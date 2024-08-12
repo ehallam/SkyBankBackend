@@ -1,5 +1,7 @@
 package com.sky.SkyBankBackend.rest;
 
+import com.sky.SkyBankBackend.DTO.PayeeDTO;
+import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,28 +28,34 @@ public class TransactionController {
     }
 
     @GetMapping("/getAll")
-    public List<Transaction> getAllTransactions() {
+    public List<TransactionDTO> getAllTransactions() {
         return this.service.getAll();
     }
 
     @GetMapping("/get/{id}")
-    public Transaction getTransaction(@PathVariable int id) {
+    public TransactionDTO getTransaction(@PathVariable int id) {
         return this.service.getTransaction(id);
     }
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction addTransaction(@RequestBody Transaction transaction) {
+    public TransactionDTO addTransaction(@RequestBody TransactionDTO transaction) {
         return this.service.addTransaction(transaction);
     }
 
+
+    @GetMapping("/getAll/{email}")
+    public List<TransactionDTO> getAllByEmail(@PathVariable String email) {
+        return this.service.getAllByEmail(email);
+    }
+
     @PutMapping("/update/{id}")
-    public Transaction updateTransaction(@RequestBody Transaction transaction, @PathVariable int id) {
+    public TransactionDTO updateTransaction(@RequestBody TransactionDTO transaction, @PathVariable int id) {
         return this.service.updateTransaction(id, transaction);
     }
 
     @DeleteMapping("/delete/{id}")
-    public Transaction deleteById(@PathVariable int id) {
+    public TransactionDTO deleteById(@PathVariable int id) {
         return this.service.delete(id);
     }
 }
