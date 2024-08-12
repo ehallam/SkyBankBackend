@@ -2,6 +2,7 @@ package com.sky.SkyBankBackend.rest;
 
 import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.DTO.LoginRequestDTO;
+import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,11 @@ public class CustomerController {
         return this.service.getCustomerByEmail(email);
     }
 
+    @GetMapping("/get/accountNumber/{accountNumber}")
+    public CustomerDTO getCustomerByAccountNumber(@PathVariable Integer accountNumber) {
+        return this.service.getCustomerByAccountNumber(accountNumber);
+    }
+
     @GetMapping("/getAll")
     public List<CustomerDTO> getAll() {
         return this.service.getAll();
@@ -43,6 +49,11 @@ public class CustomerController {
         return this.service.addCustomer(newCustomer);
     }
 
+    @PutMapping("/update/{email}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CustomerDTO update(@PathVariable String email, @RequestBody Customer newCustomer) {
+        return this.service.update(email, newCustomer);
+    }
 
     @DeleteMapping("/remove/{email}")
     public CustomerDTO remove(@PathVariable String email) {

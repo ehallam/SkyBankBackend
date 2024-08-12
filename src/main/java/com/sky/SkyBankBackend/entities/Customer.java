@@ -16,10 +16,10 @@ public class Customer {
 
     private String password;
     private Integer sortCode;
-    private int accountNumber;
-    private double balance;
+    private Integer accountNumber;
+    private Double balance;
 
-    public Customer(String firstName, String lastName, String email, String password, Integer sortCode, int accountNumber, double balance){
+    public Customer(String firstName, String lastName, String email, String password, Integer sortCode, Integer accountNumber, Double balance){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -62,11 +62,11 @@ public class Customer {
         this.firstName = firstName;
     }
 
-    public int getAccountNumber() {
+    public Integer getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(int accountNumber){
+    public void setAccountNumber(Integer accountNumber){
         this.accountNumber = accountNumber;
     }
 
@@ -78,11 +78,11 @@ public class Customer {
         return this.password;
     }
 
-    public double getBalance(){
+    public Double getBalance(){
         return balance;
     }
 
-    public void setBalance(double balance){
+    public void setBalance(Double balance){
         this.balance = balance;
     }
 
