@@ -33,7 +33,7 @@ public class CustomerControllerTest {
 
     @Test
     void testCreate() throws Exception {
-        CustomerDTO newCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", "strong_password", 123456, 12345678, 1000));
+        CustomerDTO newCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", "strong_password", 123456, 12345678, 1000.00));
 
         String newCustomerAsJSON = this.mapper.writeValueAsString(newCustomer);
 
@@ -44,7 +44,7 @@ public class CustomerControllerTest {
 
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isCreated();
 
-        CustomerDTO createdCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", CustomerServiceDB.sha256("strong_password"), 123456, 12345678, 1000));
+        CustomerDTO createdCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", CustomerServiceDB.sha256("strong_password"), 123456, 12345678, 1000.00));
         String createdCustomerAsJSON = this.mapper.writeValueAsString(createdCustomer);
 
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(createdCustomerAsJSON);
@@ -58,7 +58,20 @@ public class CustomerControllerTest {
                 .get("/customer/get/email/john@email.com");
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
 
-        CustomerDTO toFind = new CustomerDTO(new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200));
+        CustomerDTO toFind = new CustomerDTO(new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200.00));
+        String toFindAsJSON = this.mapper.writeValueAsString(toFind);
+        ResultMatcher checkBody = MockMvcResultMatchers.content().json(toFindAsJSON);
+
+        this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+    }
+
+    @Test
+    void testGetCustomerByAccountNumber() throws Exception {
+        RequestBuilder req = MockMvcRequestBuilders
+                .get("/customer/get/accountNumber/87654321");
+        ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
+
+        CustomerDTO toFind = new CustomerDTO(new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200.00));
         String toFindAsJSON = this.mapper.writeValueAsString(toFind);
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(toFindAsJSON);
 
@@ -67,18 +80,18 @@ public class CustomerControllerTest {
 
     @Test
     void testUpdateCustomer() throws Exception {
-        CustomerDTO newCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", "strong_password", 123456, 12345678, 1000));
+        CustomerDTO updates = new CustomerDTO(new Customer(null, null, null, null, null, null, 2500.00));
 
-        String newCustomerAsJSON = this.mapper.writeValueAsString(newCustomer);
+        String updatesAsJSON = this.mapper.writeValueAsString(updates);
 
         RequestBuilder req = MockMvcRequestBuilders
-                .put("/customer/create")
-                .content(newCustomerAsJSON)
+                .put("/customer/update/john@email.com")
+                .content(updatesAsJSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isCreated();
 
-        CustomerDTO createdCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", CustomerServiceDB.sha256("strong_password"), 123456, 12345678, 1000));
+        CustomerDTO createdCustomer = new CustomerDTO(new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 2500.00));
         String createdCustomerAsJSON = this.mapper.writeValueAsString(createdCustomer);
 
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(createdCustomerAsJSON);
