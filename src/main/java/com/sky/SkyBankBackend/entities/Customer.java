@@ -8,19 +8,19 @@ import jakarta.persistence.*;
 public class Customer {
 
     @Id // PK
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private Integer id;
+    @Column(unique = true)
+    private String email;
 
     @Column
     private String firstName;
     private String lastName;
-    private String email;
+
     private String password;
-    private String sortCode;
+    private Integer sortCode;
     private int accountNumber;
     private double balance;
 
-    public Customer(String firstName, String lastName, String email, String password, String sortCode, int accountNumber, double balance){
+    public Customer(String firstName, String lastName, String email, String password, Integer sortCode, int accountNumber, double balance){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -35,26 +35,13 @@ public class Customer {
     }
 
     public Customer(CustomerDTO newCustomer) {
-        this.id = newCustomer.getId();
+        this.email = newCustomer.getEmail();
         this.firstName = newCustomer.getFirstName();
         this.lastName = newCustomer.getLastName();
-        this.email = newCustomer.getEmail();
         this.password = newCustomer.getPassword();
         this.sortCode = newCustomer.getSortCode();
         this.accountNumber = newCustomer.getAccountNumber();
         this.balance = newCustomer.getBalance();
-    }
-
-
-
-
-    // REQUIRED
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getLastName() {
@@ -100,11 +87,11 @@ public class Customer {
         this.balance = balance;
     }
 
-    public String getSortCode(){
+    public Integer getSortCode(){
         return this.sortCode;
     }
 
-    public void setSortCode(String sortCode) {
+    public void setSortCode(Integer sortCode) {
         this.sortCode = sortCode;
     }
 
