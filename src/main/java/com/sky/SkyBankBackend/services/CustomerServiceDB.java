@@ -16,6 +16,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Primary // tells spring to use this one
@@ -30,6 +31,12 @@ public class CustomerServiceDB implements CustomerService {
     public CustomerDTO addCustomer(CustomerDTO newCustomer) {
         String hash = sha256(newCustomer.getPassword());
         newCustomer.setPassword(hash);
+        Integer newAccountNo = null;
+        Random rand = new Random();
+        do {
+            newAccountNo = rand.nextInt(10000000, 99999999);
+        } while (this.repo.findByAccountNumber(newAccountNo).isPresent());
+        newCustomer.setAccountNumber(newAccountNo);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
         return new CustomerDTO(created);
