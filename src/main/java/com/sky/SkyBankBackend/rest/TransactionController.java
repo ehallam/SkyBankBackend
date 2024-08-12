@@ -1,5 +1,6 @@
 package com.sky.SkyBankBackend.rest;
 
+import com.sky.SkyBankBackend.DTO.PayeeDTO;
 import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.services.TransactionService;
@@ -40,6 +41,12 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionDTO addTransaction(@RequestBody TransactionDTO transaction) {
         return this.service.addTransaction(transaction);
+    }
+
+
+    @GetMapping("/getAll/{email}")
+    public List<TransactionDTO> getAllByEmail(@PathVariable String email) {
+        return this.service.getAllByEmail(email);
     }
 
     @PutMapping("/update/{id}")

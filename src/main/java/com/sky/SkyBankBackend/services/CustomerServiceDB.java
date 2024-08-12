@@ -47,39 +47,10 @@ public class CustomerServiceDB implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomerByAccountNumber(Integer accountNumber) {
-        Customer found = this.repo.findByAccountNumber(accountNumber).orElseThrow(CustomerNotFoundException::new);
-        return new CustomerDTO(found);
-    }
-
-    @Override
     public CustomerDTO remove(String email) {
         Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
         this.repo.deleteById(email);
         return new CustomerDTO(found);
-    }
-
-    @Override
-    public CustomerDTO update(String email, Customer newCustomer) {
-        Customer toUpdate = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
-
-        String firstName = newCustomer.getFirstName();
-        String lastName = newCustomer.getLastName();
-        String customerEmail = newCustomer.getEmail();
-        String password = newCustomer.getPassword();
-        Integer sortCode = newCustomer.getSortCode();
-        Integer accountNumber = newCustomer.getAccountNumber();
-        Double balance = newCustomer.getBalance();
-
-        if (firstName != null) toUpdate.setFirstName(firstName);
-        if (lastName != null) toUpdate.setLastName(lastName);
-        if (customerEmail != null) toUpdate.setEmail(customerEmail);
-        if (password != null) toUpdate.setEmail(sha256(password));
-        if (sortCode != null) toUpdate.setSortCode(sortCode);
-        if (accountNumber != null) toUpdate.setAccountNumber(accountNumber);
-        if (balance != null) toUpdate.setBalance(balance);
-
-        return new CustomerDTO(this.repo.save(toUpdate));
     }
 
     @Override
@@ -91,7 +62,7 @@ public class CustomerServiceDB implements CustomerService {
         if(found.isPresent()) {
             Customer customer = found.get();
                 if(customer.getPassword().equals(sha256(password))){
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
+                    return new ResponseEntity<>(found, HttpStatus.OK);
                 }
                 else{
                     return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
@@ -101,9 +72,10 @@ public class CustomerServiceDB implements CustomerService {
         else{
             return new ResponseEntity<>("Email not found", HttpStatus.NOT_FOUND);
         }
-    }
 
-    public static String sha256(String input) {
+
+    }
+    private String sha256(String input) {
         try {
             // Get an instance of the SHA-256 message digest
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
