@@ -62,7 +62,7 @@ public class CustomerServiceDB implements CustomerService {
         if(found.isPresent()) {
             Customer customer = found.get();
                 if(customer.getPassword().equals(sha256(password))){
-                    return new ResponseEntity<>("Success", HttpStatus.OK);
+                    return new ResponseEntity<>(found, HttpStatus.OK);
                 }
                 else{
                     return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
