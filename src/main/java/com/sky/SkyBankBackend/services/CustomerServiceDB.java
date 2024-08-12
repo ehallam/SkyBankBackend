@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +27,8 @@ public class CustomerServiceDB implements CustomerService {
 
     @Override
     public CustomerDTO addCustomer(CustomerDTO newCustomer) {
+        String hash = sha256(newCustomer.getPassword());
+        newCustomer.setPassword(hash);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
         return new CustomerDTO(created);
@@ -45,5 +50,26 @@ public class CustomerServiceDB implements CustomerService {
         Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
         this.repo.deleteById(email);
         return new CustomerDTO(found);
+    }
+
+    private String sha256(String input) {
+        try {
+            // Get an instance of the SHA-256 message digest
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            // Apply SHA-256 algorithm to the input
+            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            // Convert the byte array to a hexadecimal string
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error initializing SHA-256 algorithm", e);
+        }
     }
 }
