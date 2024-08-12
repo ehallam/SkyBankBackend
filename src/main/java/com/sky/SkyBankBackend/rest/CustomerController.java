@@ -46,4 +46,9 @@ public class CustomerController {
     public CustomerDTO remove(@PathVariable String email) {
         return this.service.remove(email);
     }
+
+    @PostMapping("/hash/{password}")
+    public String hashPassword(@PathVariable String password) {
+        return this.service.hashPassword(password);
+    }
 }

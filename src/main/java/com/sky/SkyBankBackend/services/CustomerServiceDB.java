@@ -52,6 +52,11 @@ public class CustomerServiceDB implements CustomerService {
         return new CustomerDTO(found);
     }
 
+    @Override
+    public String hashPassword(String password) {
+        String hash = sha256(password);
+        return hash;
+    }
     private String sha256(String input) {
         try {
             // Get an instance of the SHA-256 message digest
