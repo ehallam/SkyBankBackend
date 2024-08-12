@@ -53,9 +53,19 @@ public class CustomerServiceDB implements CustomerService {
     }
 
     @Override
-    public String hashPassword(String password) {
-        String hash = sha256(password);
-        return hash;
+    public ResponseEntity<?> login(String email, String password) {
+        Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
+        if(found.getEmail().equals(email)){
+            if(found.getPassword().equals(sha256(password))){
+                return new ResponseEntity<>("Success", HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
+            }
+        }
+        else{
+            return new ResponseEntity<>("Email Not Found", HttpStatus.NOT_FOUND);
+        }
     }
     private String sha256(String input) {
         try {

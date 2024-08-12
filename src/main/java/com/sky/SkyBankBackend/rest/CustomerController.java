@@ -47,8 +47,8 @@ public class CustomerController {
         return this.service.remove(email);
     }
 
-    @PostMapping("/hash/{password}")
-    public String hashPassword(@PathVariable String password) {
-        return this.service.hashPassword(password);
+    @PostMapping("/login")
+    public String login(@RequestBody String loginEmail, @RequestBody String loginPassword) {
+        return this.service.login(loginEmail,loginPassword);
     }
 }
