@@ -2,6 +2,7 @@ package com.sky.SkyBankBackend.services;
 
 
 import com.sky.SkyBankBackend.DTO.CustomerDTO;
+import com.sky.SkyBankBackend.DTO.LoginRequestDTO;
 import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
 import com.sky.SkyBankBackend.repositories.CustomerRepo;
@@ -53,19 +54,26 @@ public class CustomerServiceDB implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<?> login(String email, String password) {
-        Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
-        if(found.getEmail().equals(email)){
-            if(found.getPassword().equals(sha256(password))){
-                return new ResponseEntity<>("Success", HttpStatus.OK);
-            }
-            else{
-                return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
-            }
+    public ResponseEntity<?> login(LoginRequestDTO newLoginRequest) {
+        String email = newLoginRequest.getLoginEmail();
+        String password = newLoginRequest.getLoginPassword();
+
+        Optional<Customer> found = this.repo.findByEmailIgnoreCase(email);
+        if(found.isPresent()) {
+            Customer customer = found.get();
+                if(customer.getPassword().equals(sha256(password))){
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+                }
+                else{
+                    return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
+                }
+
         }
         else{
-            return new ResponseEntity<>("Email Not Found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Email not found", HttpStatus.NOT_FOUND);
         }
+
+
     }
     private String sha256(String input) {
         try {
