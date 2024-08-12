@@ -9,11 +9,9 @@ import java.util.List;
 public interface CustomerService {
     CustomerDTO addCustomer(CustomerDTO newCustomer);
 
-    public CustomerDTO getCustomer(int id);
-
     public List<CustomerDTO> getAll();
 
     public CustomerDTO getCustomerByEmail(String email);
 
-    public CustomerDTO remove(int id);
+    public CustomerDTO remove(String email);
 }

@@ -24,11 +24,6 @@ public class CustomerController {
         return "Hello, World!"; // returned values are stored in response body
     }
 
-    @GetMapping("/get/{id}")
-    public CustomerDTO getCustomer(@PathVariable int id) {
-        return this.service.getCustomer(id);
-    }
-
     @GetMapping("/get/email/{email}")
     public CustomerDTO getCustomerByEmail(@PathVariable String email) {
         return this.service.getCustomerByEmail(email);
@@ -47,8 +42,8 @@ public class CustomerController {
     }
 
 
-    @DeleteMapping("/remove/{id}")
-    public CustomerDTO remove(@PathVariable int id) {
-        return this.service.remove(id);
+    @DeleteMapping("/remove/{email}")
+    public CustomerDTO remove(@PathVariable String email) {
+        return this.service.remove(email);
     }
 }

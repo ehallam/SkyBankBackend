@@ -6,6 +6,7 @@ import com.sky.SkyBankBackend.repositories.TransactionRepo;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class TransactionService {
     public Transaction updateTransaction(Integer id, Transaction transaction) {
         Transaction toUpdate = this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
         String description = transaction.getDescription();
-        Date transactionDate = transaction.getTransactionDate();
+        LocalDate transactionDate = transaction.getTransactionDate();
         Double amountIn = transaction.getAmountIn();
         Double amountOut = transaction.getAmountOut();
         Double balance = transaction.getBalance();

@@ -3,24 +3,24 @@ package com.sky.SkyBankBackend.DTO;
 import com.sky.SkyBankBackend.entities.Customer;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 public class CustomerDTO {
 
-    private Integer id;
 
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    private int sortCode;
-    private int accountNumber;
+    private Integer sortCode;
+    private Integer accountNumber;
     private double balance;
+
 
     public CustomerDTO() {
     }
 
     public CustomerDTO(Customer customer) {
-        this.id = customer.getId();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
         this.email = customer.getEmail();
@@ -28,14 +28,6 @@ public class CustomerDTO {
         this.sortCode = customer.getSortCode();
         this.accountNumber = customer.getAccountNumber();
         this.balance = customer.getBalance();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getLastName() {
@@ -57,11 +49,11 @@ public class CustomerDTO {
         this.firstName = firstName;
     }
 
-    public int getAccountNumber() {
+    public Integer getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(int accountNumber){
+    public void setAccountNumber(Integer accountNumber){
         this.accountNumber = accountNumber;
     }
 
@@ -73,11 +65,11 @@ public class CustomerDTO {
         return this.password;
     }
 
-    public int getSortCode(){
+    public Integer getSortCode(){
         return this.sortCode;
     }
 
-    public void setSortCode(int sortCode) {
+    public void setSortCode(Integer sortCode) {
         this.sortCode = sortCode;
     }
 
