@@ -1,8 +1,11 @@
 package com.sky.SkyBankBackend.services;
 
 
+import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.DTO.PayeeDTO;
+import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.entities.Payee;
+import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
 import com.sky.SkyBankBackend.exceptions.PayeeNotFoundException;
 import com.sky.SkyBankBackend.repositories.PayeeRepo;
 import org.springframework.context.annotation.Primary;
@@ -35,6 +38,12 @@ public class PayeeServiceDB implements PayeeService {
     @Override
     public List<PayeeDTO> getAll() {
         return this.repo.findAll().stream().map(PayeeDTO::new).toList();
+    }
+
+    @Override
+    public List<PayeeDTO> getAllByEmail(String customerEmail) {
+        List<Payee> payees = this.repo.findAllByCustomerEmailIgnoreCase(customerEmail).orElseThrow(PayeeNotFoundException::new);
+        return payees.stream().map(PayeeDTO::new).toList();
     }
 
     @Override
