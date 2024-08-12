@@ -15,8 +15,4 @@ public class TransactionControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    @Test
-    void testCreate() throws Exception {
-        Transaction toCreate = new Transaction(null, )
-    }
 }
