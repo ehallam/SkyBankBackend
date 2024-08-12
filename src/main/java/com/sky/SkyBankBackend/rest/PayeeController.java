@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/payee")
+@CrossOrigin
 public class PayeeController {
 
 

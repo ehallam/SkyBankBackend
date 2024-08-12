@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
+@CrossOrigin
 public class CustomerController {
 
 
@@ -21,11 +22,6 @@ public class CustomerController {
     @GetMapping("/hello")
     public String hello() {
         return "Hello, World!"; // returned values are stored in response body
-    }
-
-    @GetMapping("/get/{id}")
-    public CustomerDTO getCustomer(@PathVariable int id) {
-        return this.service.getCustomer(id);
     }
 
     @GetMapping("/get/email/{email}")
@@ -46,8 +42,8 @@ public class CustomerController {
     }
 
 
-    @DeleteMapping("/remove/{id}")
-    public CustomerDTO remove(@PathVariable int id) {
-        return this.service.remove(id);
+    @DeleteMapping("/remove/{email}")
+    public CustomerDTO remove(@PathVariable String email) {
+        return this.service.remove(email);
     }
 }
