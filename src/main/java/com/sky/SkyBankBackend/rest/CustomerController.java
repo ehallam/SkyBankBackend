@@ -1,8 +1,10 @@
 package com.sky.SkyBankBackend.rest;
 
 import com.sky.SkyBankBackend.DTO.CustomerDTO;
+import com.sky.SkyBankBackend.DTO.LoginRequestDTO;
 import com.sky.SkyBankBackend.services.CustomerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,5 +46,10 @@ public class CustomerController {
     @DeleteMapping("/remove/{email}")
     public CustomerDTO remove(@PathVariable String email) {
         return this.service.remove(email);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO newLoginRequest) {
+        return this.service.login(newLoginRequest);
     }
 }

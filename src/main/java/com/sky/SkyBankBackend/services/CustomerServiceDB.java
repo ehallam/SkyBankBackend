@@ -2,6 +2,7 @@ package com.sky.SkyBankBackend.services;
 
 
 import com.sky.SkyBankBackend.DTO.CustomerDTO;
+import com.sky.SkyBankBackend.DTO.LoginRequestDTO;
 import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
 import com.sky.SkyBankBackend.repositories.CustomerRepo;
@@ -52,7 +53,29 @@ public class CustomerServiceDB implements CustomerService {
         return new CustomerDTO(found);
     }
 
-    public static String sha256(String input) {
+    @Override
+    public ResponseEntity<?> login(LoginRequestDTO newLoginRequest) {
+        String email = newLoginRequest.getLoginEmail();
+        String password = newLoginRequest.getLoginPassword();
+
+        Optional<Customer> found = this.repo.findByEmailIgnoreCase(email);
+        if(found.isPresent()) {
+            Customer customer = found.get();
+                if(customer.getPassword().equals(sha256(password))){
+                    return new ResponseEntity<>("Success", HttpStatus.OK);
+                }
+                else{
+                    return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
+                }
+
+        }
+        else{
+            return new ResponseEntity<>("Email not found", HttpStatus.NOT_FOUND);
+        }
+
+
+    }
+    private String sha256(String input) {
         try {
             // Get an instance of the SHA-256 message digest
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
