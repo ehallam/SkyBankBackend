@@ -1,5 +1,6 @@
 package com.sky.SkyBankBackend.services;
 
+import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.exceptions.TransactionNotFoundException;
 import com.sky.SkyBankBackend.repositories.TransactionRepo;
@@ -11,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@Primary
 public class TransactionService {
     private TransactionRepo repo;
 
@@ -19,25 +19,24 @@ public class TransactionService {
         this.repo = repo;
     }
 
-    public Transaction addTransaction(Transaction newTransaction) {
+    public TransactionDTO addTransaction(TransactionDTO newTransaction) {
         return this.repo.save(newTransaction);
     }
 
-    public Transaction getTransaction(Integer id) {
+    public TransactionDTO getTransaction(Integer id) {
         return this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
     }
 
-    public List<Transaction> getAll() {
-        return this.repo.findAll();
+    public List<TransactionDTO> getAll() {
+        return this.repo.findAll().stream().map(TransactionDTO::new).toList();
     }
 
-    public Transaction updateTransaction(Integer id, Transaction transaction) {
-        Transaction toUpdate = this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
+    public TransactionDTO updateTransaction(Integer id, TransactionDTO transaction) {
+        TransactionDTO toUpdate = this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
         String description = transaction.getDescription();
         LocalDate transactionDate = transaction.getTransactionDate();
         Double amountIn = transaction.getAmountIn();
         Double amountOut = transaction.getAmountOut();
-
 
         if (description != null) toUpdate.setDescription(description);
         if (transactionDate != null) toUpdate.setTransactionDate(transactionDate);
@@ -47,8 +46,8 @@ public class TransactionService {
         return this.repo.save(toUpdate);
     }
 
-    public Transaction delete(Integer id) {
-        Transaction toDelete = this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
+    public TransactionDTO delete(Integer id) {
+        TransactionDTO toDelete = this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
         this.repo.deleteById(id);
         return toDelete;
     }

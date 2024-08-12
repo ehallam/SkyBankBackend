@@ -13,11 +13,11 @@ CREATE TABLE `customer` (
 );
 
 CREATE TABLE `payee` (
+    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
     `first_name` VARCHAR(255),
     `last_name` VARCHAR(255),
     `sort_code` INTEGER,
     `account_number` INTEGER,
     `customer_email` VARCHAR(255),
-    FOREIGN KEY (`customer_email`) REFERENCES `customer` (`email`) ON DELETE CASCADE,
-    PRIMARY KEY (`account_number`, `sort_code`)
+    FOREIGN KEY (`customer_email`) REFERENCES `customer` (`email`) ON DELETE CASCADE
 );

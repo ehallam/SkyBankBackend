@@ -6,3 +6,4 @@ VALUES
 INSERT INTO `payee` (`first_name`, `last_name`, `sort_code`, `account_number`, `customer_email`)
 VALUES
     ('Sarah', 'Smith', '132456', '13245768', 'john@email.com');
+
