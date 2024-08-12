@@ -12,7 +12,7 @@ public class CustomerDTO {
     private String lastName;
     private String email;
     private String password;
-    private String sortCode;
+    private int sortCode;
     private int accountNumber;
     private double balance;
 
@@ -73,11 +73,11 @@ public class CustomerDTO {
         return this.password;
     }
 
-    public String getSortCode(){
+    public int getSortCode(){
         return this.sortCode;
     }
 
-    public void setSortCode(String sortCode) {
+    public void setSortCode(int sortCode) {
         this.sortCode = sortCode;
     }
 

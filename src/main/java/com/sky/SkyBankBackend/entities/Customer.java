@@ -16,11 +16,11 @@ public class Customer {
     private String lastName;
     private String email;
     private String password;
-    private String sortCode;
+    private int sortCode;
     private int accountNumber;
     private double balance;
 
-    public Customer(String firstName, String lastName, String email, String password, String sortCode, int accountNumber, double balance){
+    public Customer(String firstName, String lastName, String email, String password, int sortCode, int accountNumber, double balance){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -100,11 +100,11 @@ public class Customer {
         this.balance = balance;
     }
 
-    public String getSortCode(){
+    public int getSortCode(){
         return this.sortCode;
     }
 
-    public void setSortCode(String sortCode) {
+    public void setSortCode(int sortCode) {
         this.sortCode = sortCode;
     }
 
