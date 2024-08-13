@@ -29,27 +29,33 @@ public class TransactionService {
     public TransactionDTO addTransaction(TransactionDTO newTransaction) {
         Transaction toSave = new Transaction(newTransaction);
         Transaction created = this.repo.save(toSave);
+        updateBalance(newTransaction);
 
+        return new TransactionDTO(created);
+    }
+
+    private void updateBalance(TransactionDTO newTransaction) {
         Customer payee = this.customerRepo.findByAccountNumber(newTransaction.getPayeeAccountNumber()).orElseThrow(CustomerNotFoundException::new);
         Customer customer = this.customerRepo.findById(newTransaction.getCustomerEmail()).orElseThrow(CustomerNotFoundException::new);
+
         Double payeeInitialBalance = payee.getBalance();
         Double customerInitialBalance = customer.getBalance();
 
         // The payee is receiving money
-        if (newTransaction.getAmountOut() != null) {
+        if (newTransaction.getAmountOut() != null || newTransaction.getAmountOut() != 0.00) {
             payee.setBalance(payeeInitialBalance + newTransaction.getAmountOut());
             customer.setBalance(customerInitialBalance - newTransaction.getAmountOut());
-        } else {
+        }
+        else {
             // The customer is getting money
-             customer.setBalance(customerInitialBalance + newTransaction.getAmountIn());
-             payee.setBalance(payeeInitialBalance - newTransaction.getAmountIn());
+            customer.setBalance(customerInitialBalance + newTransaction.getAmountIn());
+            payee.setBalance(payeeInitialBalance - newTransaction.getAmountIn());
         }
 
         this.customerRepo.save(payee);
         this.customerRepo.save(customer);
-        return new TransactionDTO(created);
     }
-    
+
     public TransactionDTO getTransaction(int id) {
         Transaction found = this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
         return new TransactionDTO(found);
