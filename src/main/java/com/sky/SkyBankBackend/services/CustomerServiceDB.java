@@ -42,7 +42,7 @@ public class CustomerServiceDB implements CustomerService {
         } while (this.repo.findBySortCode(newSortCode).isPresent());
         newCustomer.setSortCode(newSortCode);
         newCustomer.setAccountNumber(newAccountNo);
-        newCustomer.setBalance(500);
+        newCustomer.setBalance(500.00);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
         return new CustomerDTO(created);
@@ -50,12 +50,21 @@ public class CustomerServiceDB implements CustomerService {
 
     @Override
     public List<CustomerDTO> getAll() {
-        return this.repo.findAll().stream().map(CustomerDTO::new).toList();
+        List<CustomerDTO> customers = this.repo.findAll().stream().map(CustomerDTO::new).toList();
+        customers.forEach(c -> c.setPassword(null));
+        return customers;
     }
 
     @Override
     public CustomerDTO getCustomerByEmail(String email) {
         Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
+        found.setPassword(null);
+        return new CustomerDTO(found);
+    }
+
+    @Override
+    public CustomerDTO getCustomerByAccountNumber(Integer accountNumber) {
+        Customer found = this.repo.findByAccountNumber(accountNumber).orElseThrow(CustomerNotFoundException::new);
         return new CustomerDTO(found);
     }
 
@@ -86,10 +95,32 @@ public class CustomerServiceDB implements CustomerService {
         else{
             return new ResponseEntity<>("Email not found", HttpStatus.NOT_FOUND);
         }
-
-
     }
-    private String sha256(String input) {
+
+    @Override
+    public CustomerDTO update(String email, Customer newCustomer) {
+        Customer toUpdate = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
+
+        String firstName = newCustomer.getFirstName();
+        String lastName = newCustomer.getLastName();
+        String customerEmail = newCustomer.getEmail();
+        String password = newCustomer.getPassword();
+        Integer sortCode = newCustomer.getSortCode();
+        Integer accountNumber = newCustomer.getAccountNumber();
+        Double balance = newCustomer.getBalance();
+
+        if (firstName != null) toUpdate.setFirstName(firstName);
+        if (lastName != null) toUpdate.setLastName(lastName);
+        if (customerEmail != null) toUpdate.setEmail(customerEmail);
+        if (password != null) toUpdate.setEmail(sha256(password));
+        if (sortCode != null) toUpdate.setSortCode(sortCode);
+        if (accountNumber != null) toUpdate.setAccountNumber(accountNumber);
+        if (balance != null) toUpdate.setBalance(balance);
+
+        return new CustomerDTO(this.repo.save(toUpdate));
+    }
+
+    public static String sha256(String input) {
         try {
             // Get an instance of the SHA-256 message digest
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

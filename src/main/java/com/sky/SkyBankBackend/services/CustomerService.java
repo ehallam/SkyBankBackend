@@ -18,4 +18,8 @@ public interface CustomerService {
     public CustomerDTO remove(String email);
 
     public ResponseEntity<?> login(LoginRequestDTO newLoginRequestDTO);
+
+    public CustomerDTO update(String email, Customer newCustomer);
+
+    public CustomerDTO getCustomerByAccountNumber(Integer accountNumber);
 }
