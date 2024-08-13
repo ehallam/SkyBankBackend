@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -59,7 +60,7 @@ public class CustomerServiceDB implements CustomerService {
         newCustomer.setBalance(500.00);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
-        Transaction tSave = new Transaction("Welcome Gift", null, 500.0, 0.0, created, 11111111, 111111);
+        Transaction tSave = new Transaction("Welcome Gift", LocalDate.now(), 500.0, 0.0, created, 11111111, 111111);
         Transaction tCreated = this.tRepo.save(tSave);
         return new CustomerDTO(created);
     }
