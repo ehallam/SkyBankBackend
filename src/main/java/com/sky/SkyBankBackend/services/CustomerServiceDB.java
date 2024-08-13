@@ -50,12 +50,15 @@ public class CustomerServiceDB implements CustomerService {
 
     @Override
     public List<CustomerDTO> getAll() {
-        return this.repo.findAll().stream().map(CustomerDTO::new).toList();
+        List<CustomerDTO> customers = this.repo.findAll().stream().map(CustomerDTO::new).toList();
+        customers.forEach(c -> c.setPassword(null));
+        return customers;
     }
 
     @Override
     public CustomerDTO getCustomerByEmail(String email) {
         Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
+        found.setPassword(null);
         return new CustomerDTO(found);
     }
 
