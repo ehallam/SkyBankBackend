@@ -5,6 +5,7 @@ import com.sky.SkyBankBackend.DTO.LoginRequestDTO;
 import com.sky.SkyBankBackend.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,8 +50,14 @@ public class CustomerController {
         return this.service.remove(email);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO newLoginRequest) {
-        return this.service.login(newLoginRequest);
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequestDTO newLoginRequest) {
+//        return this.service.login(newLoginRequest);
+//    }
+
+    @GetMapping("/user")
+    public String getCurrentUser() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
+
 }

@@ -16,6 +16,4 @@ public interface CustomerService {
     public CustomerDTO getCustomerByEmail(String email);
 
     public CustomerDTO remove(String email);
-
-    public ResponseEntity<?> login(LoginRequestDTO newLoginRequestDTO);
 }
