@@ -85,6 +85,12 @@ public class SecurityConfig {
 			}
 		}));
 
+		http.logout(logOut -> logOut.logoutUrl("/logout")
+				.clearAuthentication(true)
+				.invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID")
+				.logoutSuccessUrl("/login"));
+
 		http.authorizeHttpRequests(request -> {
 			request.requestMatchers("/homepage","/login","/customer/create", "customer/user").permitAll().anyRequest().authenticated();
 		});
