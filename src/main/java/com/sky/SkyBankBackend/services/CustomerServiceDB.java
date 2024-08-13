@@ -16,6 +16,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Primary // tells spring to use this one
@@ -30,6 +31,18 @@ public class CustomerServiceDB implements CustomerService {
     public CustomerDTO addCustomer(CustomerDTO newCustomer) {
         String hash = sha256(newCustomer.getPassword());
         newCustomer.setPassword(hash);
+        Integer newAccountNo = null;
+        Random rand = new Random();
+        do {
+            newAccountNo = rand.nextInt(10000000, 99999999);
+        } while (this.repo.findByAccountNumber(newAccountNo).isPresent());
+        Integer newSortCode = null;
+        do {
+            newSortCode = rand.nextInt(100000, 999999);
+        } while (this.repo.findBySortCode(newSortCode).isPresent());
+        newCustomer.setSortCode(newSortCode);
+        newCustomer.setAccountNumber(newAccountNo);
+        newCustomer.setBalance(500.00);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
         return new CustomerDTO(created);
@@ -68,7 +81,8 @@ public class CustomerServiceDB implements CustomerService {
         if(found.isPresent()) {
             Customer customer = found.get();
                 if(customer.getPassword().equals(sha256(password))){
-                    return new ResponseEntity<>(found, HttpStatus.OK);
+
+                    return new ResponseEntity<>(found, HttpStatus.OK); //Send token here
                 }
                 else{
                     return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
