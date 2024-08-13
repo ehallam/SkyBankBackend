@@ -92,7 +92,7 @@ public class SecurityConfig {
 				.logoutSuccessUrl("/login"));
 
 		http.authorizeHttpRequests(request -> {
-			request.requestMatchers("/homepage","/login","/customer/create", "customer/user").permitAll().anyRequest().authenticated();
+			request.requestMatchers("/homepage","/login","/customer/create", "customer/user", "/logout").permitAll().anyRequest().authenticated();
 		});
 		http.exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 		return http.build();
