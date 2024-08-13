@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -85,14 +86,14 @@ public class SecurityConfig {
 			}
 		}));
 
-		http.logout(logOut -> logOut.logoutUrl("/logout")
+		http.logout(logOut -> logOut.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.clearAuthentication(true)
-				.invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID")
-				.logoutSuccessUrl("/login"));
+				.logoutSuccessUrl("/login")
+				.invalidateHttpSession(true));
 
 		http.authorizeHttpRequests(request -> {
-			request.requestMatchers("/homepage","/login","/customer/create", "customer/user", "/logout").permitAll().anyRequest().authenticated();
+			request.requestMatchers("/","/login","/customer/create", "/customer/user", "/logout").permitAll().anyRequest().authenticated();
 		});
 		http.exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 		return http.build();

@@ -3,9 +3,12 @@ package com.sky.SkyBankBackend.services;
 
 import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.DTO.LoginRequestDTO;
+import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Customer;
+import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
 import com.sky.SkyBankBackend.repositories.CustomerRepo;
+import com.sky.SkyBankBackend.repositories.TransactionRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -26,9 +29,11 @@ import java.util.Random;
 public class CustomerServiceDB implements CustomerService {
     private final CustomerRepo repo;
     private PasswordEncoder passwordEncoder;
+    private TransactionRepo tRepo;
 
-    public CustomerServiceDB(CustomerRepo repo, PasswordEncoder passwordEncoder) {
-        this.repo = repo;
+    public CustomerServiceDB(CustomerRepo repo, TransactionRepo tRepo, PasswordEncoder passwordEncoder) {
+       this.repo = repo;
+        this.tRepo = tRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -54,6 +59,8 @@ public class CustomerServiceDB implements CustomerService {
         newCustomer.setBalance(500);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
+        Transaction tSave = new Transaction("Welcome Gift", null, 500.0, 0.0, created, 11111111, 111111);
+        Transaction tCreated = this.tRepo.save(tSave);
         return new CustomerDTO(created);
     }
 
