@@ -56,7 +56,7 @@ public class CustomerServiceDB implements CustomerService {
         } while (this.repo.findBySortCode(newSortCode).isPresent());
         newCustomer.setSortCode(newSortCode);
         newCustomer.setAccountNumber(newAccountNo);
-        newCustomer.setBalance(500);
+        newCustomer.setBalance(500.00);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
         Transaction tSave = new Transaction("Welcome Gift", null, 500.0, 0.0, created, 11111111, 111111);
@@ -66,12 +66,21 @@ public class CustomerServiceDB implements CustomerService {
 
     @Override
     public List<CustomerDTO> getAll() {
-        return this.repo.findAll().stream().map(CustomerDTO::new).toList();
+        List<CustomerDTO> customers = this.repo.findAll().stream().map(CustomerDTO::new).toList();
+        customers.forEach(c -> c.setPassword(null));
+        return customers;
     }
 
     @Override
     public CustomerDTO getCustomerByEmail(String email) {
         Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
+        found.setPassword(null);
+        return new CustomerDTO(found);
+    }
+
+    @Override
+    public CustomerDTO getCustomerByAccountNumber(Integer accountNumber) {
+        Customer found = this.repo.findByAccountNumber(accountNumber).orElseThrow(CustomerNotFoundException::new);
         return new CustomerDTO(found);
     }
 
@@ -80,5 +89,26 @@ public class CustomerServiceDB implements CustomerService {
         Customer found = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
         this.repo.deleteById(email);
         return new CustomerDTO(found);
+    }
+
+    @Override
+    public CustomerDTO update(String email, Customer newCustomer) {
+        Customer toUpdate = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
+
+        String firstName = newCustomer.getFirstName();
+        String lastName = newCustomer.getLastName();
+        String customerEmail = newCustomer.getEmail();
+        Integer sortCode = newCustomer.getSortCode();
+        Integer accountNumber = newCustomer.getAccountNumber();
+        Double balance = newCustomer.getBalance();
+
+        if (firstName != null) toUpdate.setFirstName(firstName);
+        if (lastName != null) toUpdate.setLastName(lastName);
+        if (customerEmail != null) toUpdate.setEmail(customerEmail);
+        if (sortCode != null) toUpdate.setSortCode(sortCode);
+        if (accountNumber != null) toUpdate.setAccountNumber(accountNumber);
+        if (balance != null) toUpdate.setBalance(balance);
+
+        return new CustomerDTO(this.repo.save(toUpdate));
     }
 }

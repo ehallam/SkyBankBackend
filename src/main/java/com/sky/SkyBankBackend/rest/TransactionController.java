@@ -41,21 +41,11 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionDTO addTransaction(@RequestBody TransactionDTO transaction) {
         return this.service.addTransaction(transaction);
-    }
 
+    }
 
     @GetMapping("/getAll/{email}")
     public List<TransactionDTO> getAllByEmail(@PathVariable String email) {
         return this.service.getAllByEmail(email);
-    }
-
-    @PutMapping("/update/{id}")
-    public TransactionDTO updateTransaction(@RequestBody TransactionDTO transaction, @PathVariable int id) {
-        return this.service.updateTransaction(id, transaction);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public TransactionDTO deleteById(@PathVariable int id) {
-        return this.service.delete(id);
     }
 }

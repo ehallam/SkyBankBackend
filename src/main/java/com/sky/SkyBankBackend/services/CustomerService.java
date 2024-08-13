@@ -16,4 +16,8 @@ public interface CustomerService {
     public CustomerDTO getCustomerByEmail(String email);
 
     public CustomerDTO remove(String email);
+
+    public CustomerDTO update(String email, Customer newCustomer);
+
+    public CustomerDTO getCustomerByAccountNumber(Integer accountNumber);
 }
