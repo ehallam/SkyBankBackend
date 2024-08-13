@@ -14,7 +14,7 @@ public class CustomerDTO {
     private String password;
     private Integer sortCode;
     private Integer accountNumber;
-    private double balance;
+    private Double balance;
 
 
     public CustomerDTO() {
@@ -77,11 +77,11 @@ public class CustomerDTO {
         this.email = email;
     }
 
-    public double getBalance(){
+    public Double getBalance(){
         return this.balance;
     }
 
-    public void setBalance(double balance){
+    public void setBalance(Double balance){
         this.balance = balance;
     }
 }
