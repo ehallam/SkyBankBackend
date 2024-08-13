@@ -36,7 +36,13 @@ public class CustomerServiceDB implements CustomerService {
         do {
             newAccountNo = rand.nextInt(10000000, 99999999);
         } while (this.repo.findByAccountNumber(newAccountNo).isPresent());
+        Integer newSortCode = null;
+        do {
+            newSortCode = rand.nextInt(100000, 999999);
+        } while (this.repo.findBySortCode(newSortCode).isPresent());
+        newCustomer.setSortCode(newSortCode);
         newCustomer.setAccountNumber(newAccountNo);
+        newCustomer.setBalance(500);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
         return new CustomerDTO(created);
@@ -69,7 +75,8 @@ public class CustomerServiceDB implements CustomerService {
         if(found.isPresent()) {
             Customer customer = found.get();
                 if(customer.getPassword().equals(sha256(password))){
-                    return new ResponseEntity<>(found, HttpStatus.OK);
+
+                    return new ResponseEntity<>(found, HttpStatus.OK); //Send token here
                 }
                 else{
                     return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
