@@ -18,7 +18,7 @@ public class Payee {
     private Integer sortCode;
     private Integer accountNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private Customer customer;
 
     public Payee(String firstName, String lastName, String customerEmail , Integer sortCode, Integer accountNumber, Customer customer){

@@ -25,7 +25,7 @@ public class Transaction {
     private Integer payeeAccountNumber;
     private Integer payeeSortCode;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private Customer customer;
 
     public Transaction(String description, LocalDate transactionDate, Double amountIn, Double amountOut,

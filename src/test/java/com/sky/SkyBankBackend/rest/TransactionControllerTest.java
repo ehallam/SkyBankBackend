@@ -1,17 +1,14 @@
 package com.sky.SkyBankBackend.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.entities.Transaction;
-import com.sky.SkyBankBackend.services.CustomerServiceDB;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -32,7 +29,7 @@ public class TransactionControllerTest {
     @Test
     void testCreate() throws Exception {
         Customer testCustomer = new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200.00);
-        Transaction newTransaction = new Transaction("Test payment", LocalDate.of(2024, 8, 8), 156.78, 0.00, testCustomer, 87654321, 654321);
+        TransactionDTO newTransaction = new TransactionDTO(new Transaction("Test payment", LocalDate.of(2024, 8, 8), 156.78, 0.00, new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200.00), 87654321, 654321));
         String newCustomerAsJSON = this.mapper.writeValueAsString(newTransaction);
 
         RequestBuilder req = MockMvcRequestBuilders
@@ -42,7 +39,9 @@ public class TransactionControllerTest {
 
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isCreated();
 
-        Transaction createdTransaction = new Transaction("Test payment", LocalDate.of(2024, 8, 8), 156.78, 0.00, testCustomer, 87654321, 654321);
+        TransactionDTO createdTransaction = new TransactionDTO(new Transaction("Test payment", LocalDate.of(2024, 8, 8), 156.78, 0.00, testCustomer, 87654321, 654321));
+        Transaction t = new Transaction("Test payment", LocalDate.of(2024, 8, 8), 156.78, 0.00, testCustomer, 87654321, 654321);
+        System.out.println(t.getId());
         String createdTransactionAsJSON = this.mapper.writeValueAsString(createdTransaction);
 
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(createdTransactionAsJSON);

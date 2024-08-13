@@ -43,6 +43,10 @@ public class Customer {
         this.balance = newCustomer.getBalance();
     }
 
+    public Customer(String email) {
+        this.email = email;
+    }
+
     public String getLastName() {
         return lastName;
     }

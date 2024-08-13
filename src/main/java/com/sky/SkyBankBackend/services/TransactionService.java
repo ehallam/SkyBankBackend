@@ -20,20 +20,17 @@ public class TransactionService {
         this.repo = repo;
     }
 
-    
     public TransactionDTO addTransaction(TransactionDTO newTransaction) {
         Transaction toSave = new Transaction(newTransaction);
         Transaction created = this.repo.save(toSave);
         return new TransactionDTO(created);
     }
-
     
     public TransactionDTO getTransaction(int id) {
         Transaction found = this.repo.findById(id).orElseThrow(TransactionNotFoundException::new);
         return new TransactionDTO(found);
     }
 
-    
     public List<TransactionDTO> getAll() {
         return this.repo.findAll().stream().map(TransactionDTO::new).toList();
     }

@@ -11,5 +11,4 @@ public class SkyBankBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SkyBankBackendApplication.class, args);
 	}
-
 }
