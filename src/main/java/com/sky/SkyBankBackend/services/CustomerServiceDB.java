@@ -3,12 +3,18 @@ package com.sky.SkyBankBackend.services;
 
 import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.DTO.LoginRequestDTO;
+import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Customer;
+import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
 import com.sky.SkyBankBackend.repositories.CustomerRepo;
+import com.sky.SkyBankBackend.repositories.TransactionRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -22,14 +28,22 @@ import java.util.Random;
 @Primary // tells spring to use this one
 public class CustomerServiceDB implements CustomerService {
     private final CustomerRepo repo;
+    private PasswordEncoder passwordEncoder;
+    private TransactionRepo tRepo;
 
-    public CustomerServiceDB(CustomerRepo repo) {
-        this.repo = repo;
+    public CustomerServiceDB(CustomerRepo repo, TransactionRepo tRepo, PasswordEncoder passwordEncoder) {
+       this.repo = repo;
+        this.tRepo = tRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public CustomerDTO addCustomer(CustomerDTO newCustomer) {
-        String hash = sha256(newCustomer.getPassword());
+        var badReq = this.repo.findByEmailIgnoreCase(newCustomer.getEmail());
+        badReq.ifPresent(data -> {
+            throw new EntityNotFoundException("Customer with email "+newCustomer.getEmail()+" already exists");
+        });
+        String hash = this.passwordEncoder.encode(newCustomer.getPassword());
         newCustomer.setPassword(hash);
         Integer newAccountNo = null;
         Random rand = new Random();
@@ -45,6 +59,8 @@ public class CustomerServiceDB implements CustomerService {
         newCustomer.setBalance(500.00);
         Customer toSave = new Customer(newCustomer);
         Customer created = this.repo.save(toSave);
+        Transaction tSave = new Transaction("Welcome Gift", null, 500.0, 0.0, created, 11111111, 111111);
+        Transaction tCreated = this.tRepo.save(tSave);
         return new CustomerDTO(created);
     }
 
@@ -76,35 +92,12 @@ public class CustomerServiceDB implements CustomerService {
     }
 
     @Override
-    public ResponseEntity<?> login(LoginRequestDTO newLoginRequest) {
-        String email = newLoginRequest.getLoginEmail();
-        String password = newLoginRequest.getLoginPassword();
-
-        Optional<Customer> found = this.repo.findByEmailIgnoreCase(email);
-        if(found.isPresent()) {
-            Customer customer = found.get();
-                if(customer.getPassword().equals(sha256(password))){
-
-                    return new ResponseEntity<>(found, HttpStatus.OK); //Send token here
-                }
-                else{
-                    return new ResponseEntity<>("Invalid Password", HttpStatus.UNAUTHORIZED);
-                }
-
-        }
-        else{
-            return new ResponseEntity<>("Email not found", HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @Override
     public CustomerDTO update(String email, Customer newCustomer) {
         Customer toUpdate = this.repo.findById(email).orElseThrow(CustomerNotFoundException::new);
 
         String firstName = newCustomer.getFirstName();
         String lastName = newCustomer.getLastName();
         String customerEmail = newCustomer.getEmail();
-        String password = newCustomer.getPassword();
         Integer sortCode = newCustomer.getSortCode();
         Integer accountNumber = newCustomer.getAccountNumber();
         Double balance = newCustomer.getBalance();
@@ -112,32 +105,10 @@ public class CustomerServiceDB implements CustomerService {
         if (firstName != null) toUpdate.setFirstName(firstName);
         if (lastName != null) toUpdate.setLastName(lastName);
         if (customerEmail != null) toUpdate.setEmail(customerEmail);
-        if (password != null) toUpdate.setEmail(sha256(password));
         if (sortCode != null) toUpdate.setSortCode(sortCode);
         if (accountNumber != null) toUpdate.setAccountNumber(accountNumber);
         if (balance != null) toUpdate.setBalance(balance);
 
         return new CustomerDTO(this.repo.save(toUpdate));
-    }
-
-    public static String sha256(String input) {
-        try {
-            // Get an instance of the SHA-256 message digest
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-
-            // Apply SHA-256 algorithm to the input
-            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
-
-            // Convert the byte array to a hexadecimal string
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error initializing SHA-256 algorithm", e);
-        }
     }
 }
