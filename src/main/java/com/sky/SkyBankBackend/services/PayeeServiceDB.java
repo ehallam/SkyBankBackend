@@ -47,9 +47,9 @@ public class PayeeServiceDB implements PayeeService {
     }
 
     @Override
-    public PayeeDTO remove(int id) {
-        Payee found = this.repo.findById(id).orElseThrow(PayeeNotFoundException::new);
-        this.repo.deleteById(id);
+    public PayeeDTO remove(Integer accountNumber, String email) {
+        Payee found = this.repo.findByAccountNumberAndCustomerEmail(accountNumber, email).orElseThrow(PayeeNotFoundException::new);
+        this.repo.deleteById(found.getId());
         return new PayeeDTO(found);
     }
 }

@@ -1,8 +1,8 @@
 package com.sky.SkyBankBackend.services;
 
-import com.sky.SkyBankBackend.DTO.CustomerDTO;
 import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Customer;
+import com.sky.SkyBankBackend.entities.Payee;
 import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
 import com.sky.SkyBankBackend.exceptions.TransactionNotFoundException;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Primary
@@ -27,26 +28,45 @@ public class TransactionService {
     }
 
     public TransactionDTO addTransaction(TransactionDTO newTransaction) {
-        Transaction toSave = new Transaction(newTransaction);
-        Transaction created = this.repo.save(toSave);
+        Optional<Customer> payee = null;
 
-        Customer payee = this.customerRepo.findByAccountNumber(newTransaction.getPayeeAccountNumber()).orElseThrow(CustomerNotFoundException::new);
+        try{
+            payee = this.customerRepo.findByAccountNumber(newTransaction.getPayeeAccountNumber());
+        }
+        catch(Exception ignored){
+        }
         Customer customer = this.customerRepo.findById(newTransaction.getCustomerEmail()).orElseThrow(CustomerNotFoundException::new);
-        Double payeeInitialBalance = payee.getBalance();
-        Double customerInitialBalance = customer.getBalance();
 
-        // The payee is receiving money
-        if (newTransaction.getAmountOut() != null) {
-            payee.setBalance(payeeInitialBalance + newTransaction.getAmountOut());
-            customer.setBalance(customerInitialBalance - newTransaction.getAmountOut());
-        } else {
-            // The customer is getting money
-             customer.setBalance(customerInitialBalance + newTransaction.getAmountIn());
-             payee.setBalance(payeeInitialBalance - newTransaction.getAmountIn());
+        Double customerInitialBalance = customer.getBalance();
+        if(payee.isPresent()){
+            Customer nPayee = payee.get();
+            Double payeeInitialBalance = nPayee.getBalance();
+            // The payee is receiving money
+            if (newTransaction.getAmountOut() != null) {
+                nPayee.setBalance(payeeInitialBalance + newTransaction.getAmountOut());
+                customer.setBalance(customerInitialBalance - newTransaction.getAmountOut());
+            } else {
+                // The customer is getting money
+                customer.setBalance(customerInitialBalance + newTransaction.getAmountIn());
+                nPayee.setBalance(payeeInitialBalance - newTransaction.getAmountIn());
+            }
+            this.customerRepo.save(nPayee);
+        }
+        else{
+            if (newTransaction.getAmountOut() != null) {
+                customer.setBalance(customerInitialBalance - newTransaction.getAmountOut());
+            } else {
+                // The customer is getting money
+                customer.setBalance(customerInitialBalance + newTransaction.getAmountIn());
+            }
         }
 
-        this.customerRepo.save(payee);
+
+
         this.customerRepo.save(customer);
+
+        Transaction toSave = new Transaction(newTransaction);
+        Transaction created = this.repo.save(toSave);
         return new TransactionDTO(created);
     }
     

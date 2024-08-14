@@ -49,8 +49,8 @@ public class PayeeController {
     }
 
 
-    @DeleteMapping("/remove/{id}")
-    public PayeeDTO remove(@PathVariable int id) {
-        return this.service.remove(id);
+    @DeleteMapping("/remove/{accountNumber}/{email}")
+    public PayeeDTO remove(@PathVariable Integer accountNumber, @PathVariable String email) {
+        return this.service.remove(accountNumber,email);
     }
 }
