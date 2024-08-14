@@ -9,4 +9,9 @@ import java.util.Optional;
 
 public interface PayeeRepo extends JpaRepository<Payee, Integer> {
     Optional<List<Payee>> findAllByCustomerEmailIgnoreCase(String customerEmail);
+
+    Optional<Payee> findByAccountNumberAndCustomerEmail(Integer accountNumber, String customerEmail);
+
+    Optional<Payee> deleteByAccountNumberAndCustomerEmail(Integer accountNumber, String customerEmail);
+
 }

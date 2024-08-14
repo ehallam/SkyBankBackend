@@ -13,5 +13,5 @@ public interface PayeeService {
 
     public List<PayeeDTO> getAllByEmail(String customerEmail);
 
-    public PayeeDTO remove(int id);
+    public PayeeDTO remove(Integer accountNumber, String customerEmail);
 }

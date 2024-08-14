@@ -44,7 +44,7 @@ public class CustomerControllerTest {
 
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isCreated();
 
-        CustomerDTO createdCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", "", 123456, 12345678, 1000.00));
+        CustomerDTO createdCustomer = new CustomerDTO(new Customer("Bob", "Smith", "bobsmith@email.com", "testPassword", 123456, 12345678, 1000.00));
         String createdCustomerAsJSON = this.mapper.writeValueAsString(createdCustomer);
 
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(createdCustomerAsJSON);
