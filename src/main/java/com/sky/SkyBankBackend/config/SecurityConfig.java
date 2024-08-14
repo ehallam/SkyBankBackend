@@ -92,7 +92,6 @@ public class SecurityConfig {
 				.logoutSuccessUrl("/login")
 				.invalidateHttpSession(true));
 
-		// Allow unauthorised requests
 		http.authorizeHttpRequests(request -> {
 			request.requestMatchers("/","/login","/customer/create", "/customer/user", "/logout", "/customer/hello").permitAll().anyRequest().authenticated();
 		});
