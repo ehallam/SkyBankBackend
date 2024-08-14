@@ -7,6 +7,7 @@ import com.sky.SkyBankBackend.DTO.TransactionDTO;
 import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
+import com.sky.SkyBankBackend.exceptions.DuplicateEmailException;
 import com.sky.SkyBankBackend.repositories.CustomerRepo;
 import com.sky.SkyBankBackend.repositories.TransactionRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -42,7 +43,7 @@ public class CustomerServiceDB implements CustomerService {
     public CustomerDTO addCustomer(CustomerDTO newCustomer) {
         var badReq = this.repo.findByEmailIgnoreCase(newCustomer.getEmail());
         badReq.ifPresent(data -> {
-            throw new EntityNotFoundException("Customer with email "+newCustomer.getEmail()+" already exists");
+            throw new DuplicateEmailException();
         });
         String hash = this.passwordEncoder.encode(newCustomer.getPassword());
         newCustomer.setPassword(hash);
