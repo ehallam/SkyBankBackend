@@ -92,8 +92,9 @@ public class SecurityConfig {
 				.logoutSuccessUrl("/login")
 				.invalidateHttpSession(true));
 
+		// Allow unauthorised requests to these paths
 		http.authorizeHttpRequests(request -> {
-			request.requestMatchers("/","/login").permitAll().anyRequest().authenticated();
+			request.requestMatchers("/","/login","/customer/create", "/customer/user", "/logout", "/customer/hello").permitAll().anyRequest().authenticated();
 		});
 		http.exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 		return http.build();
