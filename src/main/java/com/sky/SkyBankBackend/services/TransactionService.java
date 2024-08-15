@@ -104,7 +104,7 @@ public class TransactionService {
     }
 
     public List<TransactionDTO> getAllByEmail(String customerEmail) {
-        List<Transaction> transactions = this.repo.findAllByCustomerEmailIgnoreCase(customerEmail).orElseThrow(TransactionNotFoundException::new);
+        List<Transaction> transactions = this.repo.findAllByCustomerEmailIgnoreCaseOrderByTransactionDateDesc(customerEmail).orElseThrow(TransactionNotFoundException::new);
         return transactions.stream().map(TransactionDTO::new).toList();
     }
 }
