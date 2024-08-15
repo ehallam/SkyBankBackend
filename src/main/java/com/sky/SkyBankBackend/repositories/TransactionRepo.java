@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
     Optional<List<Transaction>> findAllByCustomerEmailIgnoreCase(String email);
 
+    Optional<List<Transaction>> findAllByPayeeAccountNumber(Integer accountNumber);
+
 }
