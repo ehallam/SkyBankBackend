@@ -10,3 +10,12 @@ VALUES
     ('Charlie', 'Mann', '555555', '88888888', 'john@email.com'),
     ('Eleanor', 'Holden', '22222', '33333333', 'bob@email.com');
 
+
+INSERT INTO `transactions` (`description`, `transaction_date`, `amount_in`, `amount_out`, `customer_email`, `payee_account_number`, `payee_sort_code`)
+VALUES
+    ('Test transaction 1', '2024-08-15', null, '15.52', 'john@email.com', '13245768', '132456'),
+    ('Test transaction 2', '2024-08-15', null, '56', 'bob@email.com', '87654321', '654321'),
+    ('Test transaction 3', '2024-08-15', '17', null, 'bob@email.com', '33333333', '22222');
+
+
+

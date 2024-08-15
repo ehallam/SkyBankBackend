@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
@@ -18,7 +18,7 @@ public class Transaction {
     private Integer id;
 
     private String description;
-    @Column(name = "date")
+    @Column(name = "transaction_date")
     private LocalDate transactionDate;
     private Double amountIn;
     private Double amountOut;

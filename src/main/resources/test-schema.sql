@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS `customer` CASCADE;
 DROP TABLE IF EXISTS `payee` CASCADE;
-DROP TABLE IF EXISTS `bank_transaction` CASCADE;
+DROP TABLE IF EXISTS `transactions` CASCADE;
 
 CREATE TABLE `customer` (
     `first_name` VARCHAR(255),
@@ -21,3 +21,15 @@ CREATE TABLE `payee` (
     `customer_email` VARCHAR(255),
     FOREIGN KEY (`customer_email`) REFERENCES `customer` (`email`) ON DELETE CASCADE
 );
+
+CREATE TABLE `transactions` (
+    `id` INTEGER PRIMARY KEY AUTO_INCREMENT,
+    `description` VARCHAR(255),
+    `transaction_date` DATE,
+    `amount_in` DOUBLE,
+    `amount_out` DOUBLE,
+    `customer_email` VARCHAR(255),
+    `payee_account_number` INTEGER,
+    `payee_sort_code` INTEGER,
+    FOREIGN KEY (`customer_email`) REFERENCES `customer` (`email`) ON DELETE CASCADE
+)

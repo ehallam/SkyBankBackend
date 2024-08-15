@@ -57,8 +57,10 @@ public class CustomerControllerTest {
 
     @Test
     void testGetCustomerById() throws Exception {
+
+
         RequestBuilder req = MockMvcRequestBuilders
-                .get("/customer/get/email/john@email.com");
+                .get("/customer/get/email/john@email.com").cookie();
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
 
         CustomerDTO toFind = new CustomerDTO(new Customer("John", "Johnson", "john@email.com", null, 654321, 87654321, 200.00));
