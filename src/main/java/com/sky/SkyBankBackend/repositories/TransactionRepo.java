@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
-    Optional<List<Transaction>> findAllByCustomerEmailIgnoreCaseOrderByTransactionDateDesc(String email);
+    Optional<List<Transaction>> findAllByCustomerEmailIgnoreCase(String email);
+
+    Optional<List<Transaction>> findAllByPayeeAccountNumber(Integer accountNumber);
 
 }

@@ -44,8 +44,8 @@ public class TransactionController {
 
     }
 
-    @GetMapping("/getAll/{email}")
-    public List<TransactionDTO> getAllByEmail(@PathVariable String email) {
-        return this.service.getAllByEmail(email);
+    @GetMapping("/getAll/{email}/{accountNumber}")
+    public List<TransactionDTO> getAllByEmailOrAccountNumber(@PathVariable String email, @PathVariable Integer accountNumber) {
+        return this.service.getAllByEmailOrAccountNumber(email,accountNumber);
     }
 }
