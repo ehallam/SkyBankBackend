@@ -114,7 +114,10 @@ public class TransactionService {
         if (accountTransactions.isPresent()) {
             List<Transaction> nt = accountTransactions.get();
             for (Transaction transaction : nt) {
-                transaction.setAmountIn(transaction.getAmountOut());
+                Double amountIn = transaction.getAmountIn();
+                Double amountOut = transaction.getAmountOut();
+                transaction.setAmountIn(amountOut);
+                transaction.setAmountOut(amountIn);
             }
             transactions.addAll(nt);
         }

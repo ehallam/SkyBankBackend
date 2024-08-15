@@ -41,7 +41,6 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionDTO addTransaction(@RequestBody TransactionDTO transaction) {
         return this.service.addTransaction(transaction);
-
     }
 
     @GetMapping("/getAll/{email}/{accountNumber}")

@@ -83,6 +83,7 @@ public class CustomerServiceDB implements CustomerService {
     @Override
     public CustomerDTO getCustomerByAccountNumber(Integer accountNumber) {
         Customer found = this.repo.findByAccountNumber(accountNumber).orElseThrow(CustomerNotFoundException::new);
+        found.setPassword(null);
         return new CustomerDTO(found);
     }
 
