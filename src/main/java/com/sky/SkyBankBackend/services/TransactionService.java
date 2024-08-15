@@ -5,10 +5,13 @@ import com.sky.SkyBankBackend.entities.Customer;
 import com.sky.SkyBankBackend.entities.Payee;
 import com.sky.SkyBankBackend.entities.Transaction;
 import com.sky.SkyBankBackend.exceptions.CustomerNotFoundException;
+import com.sky.SkyBankBackend.exceptions.DuplicateEmailException;
 import com.sky.SkyBankBackend.exceptions.TransactionNotFoundException;
 import com.sky.SkyBankBackend.repositories.CustomerRepo;
 import com.sky.SkyBankBackend.repositories.TransactionRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -103,8 +106,16 @@ public class TransactionService {
         return new TransactionDTO(toDelete);
     }
 
-    public List<TransactionDTO> getAllByEmail(String customerEmail) {
-        List<Transaction> transactions = this.repo.findAllByCustomerEmailIgnoreCaseOrderByTransactionDateDesc(customerEmail).orElseThrow(TransactionNotFoundException::new);
+    public List<TransactionDTO> getAllByEmailOrAccountNumber(String customerEmail, Integer accountNumber) {
+        List<Transaction> transactions = this.repo.findAllByCustomerEmailIgnoreCase(customerEmail).orElseThrow(TransactionNotFoundException::new);
+        Optional<List<Transaction>> accountTransactions = this.repo.findAllByPayeeAccountNumber(accountNumber);
+        if (accountTransactions.isPresent()) {
+            List<Transaction> nt = accountTransactions.get();
+            for (Transaction transaction : nt) {
+                transaction.setAmountIn(transaction.getAmountOut());
+            }
+            transactions.addAll(nt);
+        }
         return transactions.stream().map(TransactionDTO::new).toList();
     }
 }
