@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Sql(scripts = {"classpath:test-schema.sql", "classpath:test-data.sql"},
@@ -39,7 +41,8 @@ public class TransactionControllerTest {
         RequestBuilder req = MockMvcRequestBuilders
                 .post("/transaction/create")
                 .content(newCustomerAsJSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("user"));
 
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isCreated();
         LocalDate date = LocalDate.of(2024, 8, 8);
@@ -56,7 +59,7 @@ public class TransactionControllerTest {
     @Test
     void testGetAll() throws Exception {
 
-        RequestBuilder req = MockMvcRequestBuilders.get("/transaction/getAll/john@email.com/87654321");
+        RequestBuilder req = MockMvcRequestBuilders.get("/transaction/getAll/john@email.com/87654321").with(user("user"));
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
 
         Customer john = new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200.00);

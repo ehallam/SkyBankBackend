@@ -20,8 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @Sql(scripts = {"classpath:test-schema.sql", "classpath:test-data.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class CustomerControllerTest {
@@ -60,7 +62,7 @@ public class CustomerControllerTest {
 
 
         RequestBuilder req = MockMvcRequestBuilders
-                .get("/customer/get/email/john@email.com").cookie();
+                .get("/customer/get/email/john@email.com").with(user("user"));
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
 
         CustomerDTO toFind = new CustomerDTO(new Customer("John", "Johnson", "john@email.com", null, 654321, 87654321, 200.00));
@@ -73,7 +75,7 @@ public class CustomerControllerTest {
     @Test
     void testGetCustomerByAccountNumber() throws Exception {
         RequestBuilder req = MockMvcRequestBuilders
-                .get("/customer/get/accountNumber/87654321");
+                .get("/customer/get/accountNumber/87654321").with(user("user"));
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
 
         CustomerDTO toFind = new CustomerDTO(new Customer("John", "Johnson", "john@email.com", null, 654321, 87654321, 200.00));
@@ -92,7 +94,8 @@ public class CustomerControllerTest {
         RequestBuilder req = MockMvcRequestBuilders
                 .put("/customer/update/john@email.com")
                 .content(updatesAsJSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("user"));
 
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isCreated();
 

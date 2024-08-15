@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Sql(scripts = {"classpath:test-schema.sql", "classpath:test-data.sql"},
@@ -41,7 +43,8 @@ public class PayeeControllerTest {
         RequestBuilder req = MockMvcRequestBuilders
                 .post("/payee/create")
                 .content(newPayeeAsJSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(user("user"));
 
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isCreated();
 
@@ -58,7 +61,7 @@ public class PayeeControllerTest {
     void testDelete() throws Exception {
         Customer testCustomer = new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200.00);
 
-        RequestBuilder req = MockMvcRequestBuilders.delete("/payee/remove/13245768/john@email.com");
+        RequestBuilder req = MockMvcRequestBuilders.delete("/payee/remove/13245768/john@email.com").with(user("user"));
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
         PayeeDTO toFind = new PayeeDTO(new Payee("Sarah", "Smith", "john@email.com", 132456, 13245768, testCustomer));
         toFind.setId(1);
@@ -70,7 +73,7 @@ public class PayeeControllerTest {
 
     @Test
     void testGetAll() throws Exception {
-        RequestBuilder req = MockMvcRequestBuilders.get("/payee/getAll/john@email.com");
+        RequestBuilder req = MockMvcRequestBuilders.get("/payee/getAll/john@email.com").with(user("user"));
         ResultMatcher checkStatus = MockMvcResultMatchers.status().isOk();
         Customer testCustomer = new Customer("John", "Johnson", "john@email.com", "testPassword", 654321, 87654321, 200.00);
         Payee firstPayee = new Payee("Sarah", "Smith", "john@email.com", 132456, 13245768, testCustomer);
