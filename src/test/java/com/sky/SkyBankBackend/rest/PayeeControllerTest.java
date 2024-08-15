@@ -91,6 +91,5 @@ public class PayeeControllerTest {
         ResultMatcher checkBody = MockMvcResultMatchers.content().json(payeesAsJSON);
 
         this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
-
     }
 }
