@@ -15,6 +15,8 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,6 +118,8 @@ public class TransactionService {
             }
             transactions.addAll(nt);
         }
+
+        transactions.sort(Comparator.comparing(Transaction::getTransactionDate).reversed());
         return transactions.stream().map(TransactionDTO::new).toList();
     }
 }
