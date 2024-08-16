@@ -93,7 +93,7 @@ public class SecurityConfig {
 				.invalidateHttpSession(true));
 
 		http.authorizeHttpRequests(request -> {
-			request.requestMatchers("/","/login","/customer/create", "/customer/user", "/logout", "/customer/hello").permitAll().anyRequest().authenticated();
+			request.requestMatchers("/","/login","/customer/create", "/customer/user", "/logout", "/customer/hello", "/customer/get/email/**").permitAll().anyRequest().authenticated();
 		});
 		http.exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 		return http.build();
